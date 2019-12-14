@@ -1,0 +1,389 @@
+## This is the interface to run the QOS on. This is the edge interface before traffic leaves your MikroTik
+:global QOSINTERFACE "ether1" 
+ 
+## This is the name of this interface. Use it to distinguish it from other QOS scripts running
+:global TREE "WAN1"
+ 
+## Adjust the queue types speeds to match the download and upload speed for each interface
+:global PCQDOWNLOD "50M"
+:global PCQUPLOAD "10M"
+ 
+## Adjust queue tree speeds to match the download and upload speed for each interface.
+## MAXDOWNLOAD = MAXDLINT + MAXDLNONINT  where MAXDLINT = ~90% of MAXDOWNLOAD
+ 
+:global MAXDOWNLOAD "50M"
+:global MAXDLINT "40M"
+:global MAXDLNONINT "10M"
+ 
+:global MAXUPLOAD "10M"
+:global MAXUPINT "9M"
+:global MAXUPNONINT "1M"
+ 
+####################Created By www.openfig.com
+####################There are no more value to change below this line##########################
+####################
+ 
+#IP Address List Entries:
+#Add any PPPoE ranges to the "QOSCustomerIPs" list.
+ 
+/ip firewall address-list
+add address=192.168.0.0/16 comment="" disabled=no list=QOSCustomerIPs
+add address=10.0.0.0/8 comment="" disabled=no list=QOSCustomerIPs
+add address=172.16.0.0/12 comment="" disabled=no list=QOSCustomerIPs
+add address=10.0.0.0/24 comment="ISP IP Addresses" disabled=no list=ISP
+ 
+add address=12.129.193.0/24 comment=WoW disabled=no list=games
+add address=12.129.222.0/23 comment=WoW disabled=no list=games
+add address=12.129.225.0/24 comment=WoW disabled=no list=games
+add address=12.129.228.0/24 comment=WoW disabled=no list=games
+add address=12.129.233.0/24 comment=WoW disabled=no list=games
+add address=12.129.252.0/23 comment=WoW disabled=no list=games
+add address=63.241.255.0/24 comment=WoW disabled=no list=games
+add address=72.5.213.0/24 comment=WoW disabled=no list=games
+add address=80.239.149.0/24 comment=WoW disabled=no list=games
+add address=80.239.179.0/24 comment=WoW disabled=no list=games
+add address=80.239.181.0/24 comment=WoW disabled=no list=games
+add address=80.239.185.0/24 comment=WoW disabled=no list=games
+add address=80.239.233.0/24 comment=WoW disabled=no list=games
+add address=192.12.244.0/24 comment=WoW disabled=no list=games
+add address=195.12.246.0/24 comment=WoW disabled=no list=games
+add address=199.107.6.0/23 comment=WoW disabled=no list=games
+add address=199.107.24.0/23 comment=WoW disabled=no list=games
+add address=206.16.118.0/23 comment=WoW disabled=no list=games
+add address=206.16.147.0/24 comment=WoW disabled=no list=games
+add address=206.18.148.0/23 comment=WoW disabled=no list=games
+add address=206.18.98.0/23 comment=WoW disabled=no list=games
+add address=206.16.235.0/24 comment=WoW disabled=no list=games
+add address=206.17.111.0/24 comment=WoW disabled=no list=games
+add address=213.248.123.0/24 comment=WoW disabled=no list=games
+add address=213.248.127.0/24 comment=WoW disabled=no list=games
+ 
+add address=202.9.66.0/23 comment=SC2 disabled=no list=games
+add address=12.129.254.0/23 comment=SC2 disabled=no list=games
+add address=12.129.206.0/24 comment=SC2 disabled=no list=games
+ 
+add address=12.129.242.0/24 comment="Diablo III" disabled=no list=games
+add address=12.130.245.0/24 comment="Diablo III" disabled=no list=games
+add address=12.130.244.0/24 comment="Diablo III" disabled=no list=games
+add address=12.130.246.0/24 comment="Diablo III" disabled=no list=games
+ 
+add address=63.150.138.0/24 disabled=no comment="Dota 2" list=games
+add address=103.10.124.0/24 disabled=no comment="Dota 2" list=games
+add address=103.10.125.0/24 disabled=no comment="Dota 2" list=games
+add address=103.28.54.0/23 disabled=no comment="Dota 2" list=games
+add address=146.66.152.0/23 disabled=no comment="Dota 2" list=games
+add address=146.66.154.0/24 disabled=no comment="Dota 2" list=games
+add address=146.66.155.0/24 disabled=no comment="Dota 2" list=games
+add address=146.66.156.0/23 disabled=no comment="Dota 2" list=games
+add address=146.66.158.0/23 disabled=no comment="Dota 2" list=games
+add address=185.25.180.0/23 disabled=no comment="Dota 2" list=games
+add address=185.25.182.0/24 disabled=no comment="Dota 2" list=games
+add address=192.69.96.0/22 disabled=no comment="Dota 2" list=games
+add address=205.196.6.0/24 disabled=no comment="Dota 2" list=games
+add address=208.64.200.0/24 disabled=no comment="Dota 2" list=games
+add address=208.64.201.0/24 disabled=no comment="Dota 2" list=games
+add address=208.64.202.0/24 disabled=no comment="Dota 2" list=games
+add address=208.64.203.0/24 disabled=no comment="Dota 2" list=games
+add address=208.78.164.0/22 disabled=no comment="Dota 2" list=games
+add address=216.111.123.0/24 disabled=no comment="Dota 2" list=games
+ 
+add address=31.186.224.0/24 comment="LoL Europe" disabled=no list=games
+add address=31.186.226.0/24 comment="LoL Europe" disabled=no list=games
+add address=64.7.194.0/24 comment="LoL Europe" disabled=no list=games
+add address=95.172.65.0/24 comment="LoL Europe" disabled=no list=games
+add address=95.172.70.0/24 comment="LoL Europe" disabled=no list=games
+add address=66.150.148.0/24 comment="LoL EU-NE" disabled=no list=games
+add address=64.7.194.0/24 comment="LoL NA" disabled=no list=games
+add address=66.150.148.0/24 comment="LoL NA" disabled=no list=games
+add address=192.64.168.0/24 comment="LoL NA" disabled=no list=games
+add address=192.64.169.0/24 comment="LoL NA" disabled=no list=games
+add address=192.64.170.0/24 comment="LoL NA" disabled=no list=games
+add address=216.133.234.0/24 comment="LoL NA" disabled=no list=games
+add address=192.64.169.0/24 comment="LoL Oceania" disabled=no list=games
+add address=59.100.95.128/25 comment="LoL Oceania" disabled=no list=games
+add address=203.116.112.128/25 comment="LoL Singapore/Malaysia" disabled=no list=games
+ 
+add list=games comment="Lowerping - US West - Panther 1" address=216.240.136.162
+add list=games comment="Lowerping - US West - Panther 2" address=216.240.145.9
+add list=games comment="Lowerping - US West - Panther 3" address=64.69.36.224
+add list=games comment="Lowerping - US West - Panther 4" address=208.70.75.171
+add list=games comment="Lowerping - US West - Panther 5" address=208.70.78.93
+add list=games comment="Lowerping - US West - Panther 6" address=216.240.136.167
+add list=games comment="Lowerping - US West - Tiger 1" address=64.56.65.9
+add list=games comment="Lowerping - US West - Tiger 2" address=74.222.8.249
+add list=games comment="Lowerping - US West - Fox 1" address=216.18.198.2
+add list=games comment="Lowerping - US West - Fox 2" address=173.231.26.242
+add list=games comment="Lowerping - US West - Lion A1" address=66.212.28.128
+add list=games comment="Lowerping - US West - Lion A2" address=66.63.191.237
+add list=games comment="Lowerping - US West - Lion B1" address=72.11.142.216
+add list=games comment="Lowerping - US West - Lion B2" address=72.11.142.217
+add list=games comment="Lowerping - US West - Lion C1" address=96.44.172.186
+add list=games comment="Lowerping - US West - Lion C2" address=96.44.177.26
+add list=games comment="Lowerping - US West - Lion D1" address=96.44.177.27
+add list=games comment="Lowerping - US West - Lion D2" address=72.11.142.218
+add list=games comment="Lowerping - US West - Panda 1" address=64.120.10.178
+add list=games comment="Lowerping - US West - Rhino 1" address=72.51.46.93
+add list=games comment="Lowerping - US West - Squid 1" address=173.245.68.180
+add list=games comment="Lowerping - US West - Squid 2" address=173.245.68.178
+add list=games comment="Lowerping - US West - Koala 1" address=8.17.252.162
+add list=games comment="Lowerping - US West - Koala 2" address=8.17.252.163
+add list=games comment="Lowerping - US West - Salmon 1" address=50.23.65.37
+add list=games comment="Lowerping - US West - Salmon 2" address=174.127.96.124
+add list=games comment="Lowerping - US West - Salmon 3" address=174.127.96.127
+add list=games comment="Lowerping - US East - Cobra 1" address=66.109.20.100
+add list=games comment="Lowerping - US East - Otter 1" address=66.199.235.194
+add list=games comment="Lowerping - US East - Otter 2" address=72.9.100.90
+add list=games comment="Lowerping - US East - Spider 1" address=173.208.45.82
+add list=games comment="Lowerping - US Central - Frog 1" address=69.162.127.98
+add list=games comment="Lowerping - US Central - Tadpole 1" address=174.133.108.202
+add list=games comment="Lowerping - US Central - Toad 1" address=174.34.132.50
+add list=games comment="Lowerping - Chicago - Macaw 1" address=70.32.43.122
+add list=games comment="Lowerping - Chicago - Jaguar 1" address=184.154.38.138
+add list=games comment="Lowerping - Europe - London 1" address=78.129.220.51
+add list=games comment="Lowerping - Europe - Germany 1" address=188.138.24.38
+add list=games comment="Lowerping - Europe - Germany 3" address=85.10.193.111
+add list=games comment="Lowerping - Europe - Netherlands 1" address=94.75.208.164
+add list=games comment="Lowerping - Europe - Netherlands 2" address=62.212.91.21
+add list=games comment="Lowerping - Europe - Paris 1" address=91.191.144.94
+add list=games comment="Lowerping - Europe - Paris 2" address=46.21.207.116
+ 
+add list=games comment="SWTOR - USA/EUROPE" address=159.153.0.0/16
+ 
+add address=206.127.144.0/20 comment="GW2 - ArenaNet (NC Interactive)" disabled=no list=games
+add address=64.25.32.0/20 comment="GW2 - ArenaNet (NC Interactive)" disabled=no list=games
+ 
+ 
+#Mangle Rules:
+/ip firewall mangle
+add action=log chain=notes comment="Start of QoS tree version updated on 4/4/2014" disabled=no log-prefix=""
+add action=accept chain=prerouting comment="Accept traffic From QOSCustomerIPs to QOSCustomerIPs" disabled=no dst-address-list=QOSCustomerIPs src-address-list=QOSCustomerIPs
+add action=mark-packet chain=prerouting comment="We should start with marking everything as unknown - dn_p7_interactive $TREE" disabled=no in-interface=$QOSINTERFACE new-packet-mark=("dn_p7_interactive_".$TREE) passthrough=yes
+add action=mark-packet chain=postrouting comment="We should start with marking everything as unknown - up_p7_interactive" disabled=no new-packet-mark=("up_p7_interactive_".$TREE) out-interface=$QOSINTERFACE passthrough=yes
+add action=mark-packet chain=postrouting comment="Mark all ACK packets p1 for outbound traffic." disabled=no new-packet-mark=("up_p1_interactive_".$TREE) out-interface=$QOSINTERFACE passthrough=yes protocol=tcp tcp-flags=ack
+add action=mark-packet chain=prerouting comment="Mark all ACK packets p1 for outbound traffic." disabled=no in-interface=$QOSINTERFACE new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=yes protocol=tcp tcp-flags=ack
+add action=mark-connection chain=prerouting comment="Mark p2p connections first" disabled=no new-connection-mark=p2p_conn p2p=all-p2p passthrough=yes
+add action=mark-packet chain=prerouting comment="Identifiable P2P is set at p8_noninteractive with NO PASSTHROUGH.  This is the lowest priority we can configure" connection-mark=p2p_conn disabled=no in-interface=$QOSINTERFACE new-packet-mark=("dn_p8_noninteractive_".$TREE) passthrough=no
+add action=mark-packet chain=postrouting comment="Identifiable P2P is set at p8_noninteractive with NO PASSTHROUGH.  This is the lowest priority we can configure" connection-mark=p2p_conn disabled=no new-packet-mark=("up_p8_noninteractive_".$TREE) out-interface=$QOSINTERFACE passthrough=no
+add action=mark-packet chain=prerouting comment="Default Bittorrent as p8_noninteractive with NO PASSTHROUGH" disabled=no in-interface=$QOSINTERFACE new-packet-mark=("dn_p8_noninteractive_".$TREE) passthrough=no src-port=6881 protocol=tcp
+add action=mark-packet chain=postrouting comment="Default Bittorrent as p8_noninteractive with NO PASSTHROUGH" disabled=no out-interface=$QOSINTERFACE new-packet-mark=("up_p8_interactive_".$TREE) passthrough=no dst-port=6881 protocol=tcp
+add action=mark-packet chain=prerouting comment="Mark ISP as p1_interactive with NO PASSTHROUGH" disabled=no in-interface=$QOSINTERFACE new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no src-address-list=ISP
+add action=mark-packet chain=postrouting comment="Mark ISP as p1_interactive with NO PASSTHROUGH" disabled=no dst-address-list=ISP new-packet-mark=("up_p1_interactive_".$TREE) out-interface=$QOSINTERFACE passthrough=no
+add action=mark-packet chain=prerouting comment="BGP as p1_interactive with NO PASSTHROUGH" disabled=no in-interface=$QOSINTERFACE new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no src-port=179 protocol=tcp
+add action=mark-packet chain=postrouting comment="BGP as p1_interactive with NO PASSTHROUGH" disabled=no out-interface=$QOSINTERFACE new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no dst-port=179 protocol=tcp
+add action=mark-packet chain=prerouting comment="OSPF as p1_interactive with NO PASSTHROUGH" disabled=no in-interface=$QOSINTERFACE new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=ospf
+add action=mark-packet chain=postrouting comment="OSPF as p1_interactive with NO PASSTHROUGH" disabled=no out-interface=$QOSINTERFACE new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=ospf
+add action=mark-packet chain=postrouting comment="Mark VoIP/ICMP Test (8080 udp) 0-1000000 as p1_interactive with NO PASSTHROUGH" connection-bytes=0-1000000 disabled=no dst-port=8080 new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Mark VoIP/ICMP Test (8080 udp) 0-1000000 as p1_interactive with NO PASSTHROUGH" connection-bytes=0-1000000 disabled=no new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=udp src-port=8080 in-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Mark DNS 0-64k p1_interactive with NO PASSTHROUGH" connection-rate=0-64k disabled=no dst-port=53 new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=tcp in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Mark DNS 0-64k p1_interactive with NO PASSTHROUGH" connection-rate=0-64k disabled=no new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=tcp src-port=53 out-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Mark DNS 0-64k p1_interactive with NO PASSTHROUGH" connection-rate=0-64k disabled=no dst-port=53 new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Mark DNS 0-64k p1_interactive with NO PASSTHROUGH" connection-rate=0-64k disabled=no new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=udp src-port=53 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="ICMP is p1_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=icmp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="ICMP is p1_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=icmp in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="FaceTime - 0-512k connection rate Set for p1_interactive with NO PASSTHROUGH" connection-rate=0-512k disabled=no dst-port=3478,4080,5223 new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="FaceTime - 0-512k connection rate Set for p1_interactive with NO PASSTHROUGH" connection-rate=0-512k disabled=no new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=tcp src-port=3478,4080,5223 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="FaceTime - 0-512k connection rate Set for p1_interactive with NO PASSTHROUGH" connection-rate=0-512k disabled=no dst-port=16393-16402 new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="FaceTime - 0-512k connection rate Set for p1_interactive with NO PASSTHROUGH" connection-rate=0-512k disabled=no new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=udp src-port=16393-16402 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="VOIP - SIP - 0-512k connection rate Set for p1_interactive with NO PASSTHROUGH" connection-rate=0-512k disabled=no dst-port=5060-5061 new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="VOIP - SIP - 0-512k connection rate Set for p1_interactive with NO PASSTHROUGH" connection-rate=0-512k disabled=no new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=tcp src-port=5060-5061 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="VOIP - SIP - 0-512k connection rate Set for p1_interactive with NO PASSTHROUGH" connection-rate=0-512k disabled=no dst-port=5060-5061 new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="VOIP - SIP - 0-512k connection rate Set for p1_interactive with NO PASSTHROUGH" connection-rate=0-512k disabled=no new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=udp src-port=5060-5061 in-interface=$QOSINTERFACE
+add action=mark-connection chain=prerouting comment="VOIP - mark DSCP 46 with voip connection mark" disabled=no dscp=46 new-connection-mark=voip passthrough=yes
+add action=mark-packet chain=postrouting comment="For the voip connection mark - 0-512k set to p1_interactive with NO PASSTHROUGH" connection-mark=voip connection-rate=0-512k disabled=no new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="For the voip connection mark - 0-512k set to p1_interactive with NO PASSTHROUGH" connection-mark=voip connection-rate=0-512k disabled=no new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=tcp in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="For the voip connection mark - 0-512k set to p1_interactive with NO PASSTHROUGH" connection-mark=voip connection-rate=0-512k disabled=no new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="For the voip connection mark - 0-512k set to p1_interactive with NO PASSTHROUGH" connection-mark=voip connection-rate=0-512k disabled=no new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=udp in-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="NTP is set at p1_interactive." disabled=no dst-port=123 new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=udp src-port=123 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="NTP is set at p1_interactive." disabled=no new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=udp dst-port=123 out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="WINBOX p1_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p1_interactive_".$TREE) passthrough=no protocol=tcp src-port=8291 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="WINBOX p1_interactive NO PASSTHROUGH" disabled=no dst-port=8291 new-packet-mark=("up_p1_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="### SITE SPECIFIC ADDRESS LIST ### p2_interactive NO PASSTHROUGH" disabled=no dst-address-list=site-specific new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="### SITE SPECIFIC ADDRESS LIST ### p2_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no src-address-list=site-specific in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Game Server IPs (games) p2_interactive NO PASSTHROUGH" disabled=no dst-address-list=games new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Game Server IPs (games) p2_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no src-address-list=games in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="RDP/VNC 0-1Mbps set at p2_interactive NO PASSTHROUGH" connection-rate=0-1M disabled=no dst-port=3389,5900 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="RDP/VNC 0-1Mbps set at p2_interactive NO PASSTHROUGH" connection-rate=0-1M disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=3389,5900 in-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="RDP/VNC 0-1Mbps set at p2_interactive NO PASSTHROUGH" connection-rate=0-1M disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=3389,5900 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Steam (games) 0-256k down p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no dst-port=27000-28999 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Steam (games) 0-256k up p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=27000-27015 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Runes of Magic (games) 0-256k down p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no dst-port=21002,16401-16402,16502 new-packet-mark=up_p2_interactive_wan out-interface=$QOSINTERFACE passthrough=no protocol=tcp
+add action=mark-packet chain=prerouting comment="Runes of Magic (games) 0-256k up p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no in-interface=$QOSINTERFACE new-packet-mark=dn_p2_interactive_wan passthrough=no protocol=udp src-port=21002,16401-16402,16502
+add action=mark-packet chain=postrouting comment="GunZ (games) 0-256k down p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no dst-port=7700-7800 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="GunZ (games) 0-256k up p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=7700-7800 in-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Trickster Online (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=10006,13339,22006 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Trickster Online (games) 0-128k down p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=10006,13339,22006 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Battle.net (games) 0-128k p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=6112-6119 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Battle.net (games) 0-128k p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=6112-6119 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Warcraft 3 and WoW 0-128k (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=6112-6119 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Warcraft 3 and WoW 0-512k (games) p2_interactive NO PASSTHROUGH" connection-rate=0-512k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=6112-6119 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="World of Warcraft (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=1119 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="World of Warcraft (games) 0-512k down p2_interactive NO PASSTHROUGH" connection-rate=0-512k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=1119 in-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="World of Warcraft (games) 0-512k down p2_interactive NO PASSTHROUGH" connection-rate=0-512k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=3724 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="World of Warcraft (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=3724 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="EVE Online (games) 0-512k down p2_interactive NO PASSTHROUGH" connection-rate=0-512k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=26000 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="EVE Online (games) 0-512k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=26000 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Garena 0-128k (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=1513 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Garena 0-128k (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=1513 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Garena 0-128k (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=7456 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Garena 0-128k (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=7456 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Garena 0-128k (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=8687 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Garena 0-128k (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=8687 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Lineage 0-128k (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=2000,2003 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Lineage 0-128k (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=2000,2003 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="PlayStation Network (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=3478,3479,3658 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="PlayStation Network (games) 0-256k down p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=3478,3479,3658 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="PlayStation Network (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=5223 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="PlayStation Network (games) 0-256k down p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=5223 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Xbox Live (games) p2_interactive NO PASSTHROUGH" disabled=no dst-port=3074 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Xbox Live (games) p2_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=3074 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Xbox Live (games) p2_interactive NO PASSTHROUGH" disabled=no dst-port=3074 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Xbox Live (games) p2_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=3074 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Guild Wars (games) 0-1024k up p2_interactive NO PASSTHROUGH" connection-rate=0-1024k disabled=no dst-port=6112,6600 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Guild Wars (games) 0-2048k down p2_interactive NO PASSTHROUGH" connection-rate=0-2048k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=6112,6600 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Company of Heroes (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=30260 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Company of Heroes (games) 0-128k down p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=30260 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Heroes of Newerth (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=11235-11335 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Heroes of Newerth (games) 0-128k down p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=11235-11335 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Heroes of Newerth (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=11031 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Heroes of Newerth (games) 0-128k down p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=11031 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="AVA (games) 0-128k p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=28004 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="AVA (games) 0-128k p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=28004 in-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="World of Warcraft (games) 0-256k down p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=3724 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="World of Warcraft (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=3724 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Steam (codMW2) PS3 0-128k p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=5223,3074 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Steam (codMW2) PS3 0-128k p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=5223,3074 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Steam (codMW2) PS3 0-128k p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=2005,3074,3075 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Steam (codMW2) PS3 0-128k p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=2005,3074,3075 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Steam (codMW2) 0-64k down p2_interactive NO PASSTHROUGH" connection-rate=0-64k disabled=no dst-port=1500,3005,3101,28960 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Steam (codMW2) 0-64k up p2_interactive NO PASSTHROUGH" connection-rate=0-64k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=1500,3005,3101,28960 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="BFBC2 (games) p2_interactive NO PASSTHROUGH" disabled=no dst-port=18390,18395,13505 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="BFBC2 (games) p2_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=18390,18395,13505 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="BFBC2 (games) p2_interactive NO PASSTHROUGH" disabled=no dst-port=18395 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="BFBC2 (games) p2_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=18395 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Requiem Online 0-256k (games) p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no dst-port=7110,7230 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Requiem Online 0-256k (games) p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=7230,7110 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Crysis 2 (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=64100 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Crysis 2 (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=64100 in-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="UT3 (games) 0-128k down p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=7777,3783 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="UT3 (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=7777,3783 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Rift (games) 0-128k down p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=6520-6540 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Rift (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=6520-6540 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Red Alert 3 (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=4321,6660-6669,28900,29900,2901 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Red Alert 3 (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=4321,6660-6669,28900,29900,2901 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Red Alert 3 (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=6515,6500,13139,27900  new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Red Alert 3 (games) p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=6515,6500,13139,27900 in-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Freelancer (games) 0-256k down p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=udp src-port=2302-2304 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Freelancer (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=2302-2304 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Minecraft (games) 0-512k down p2_interactive NO PASSTHROUGH" connection-rate=0-512k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=25565 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Minecraft (games) 0-128k up p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=25565 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="SSH 0-256k up p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no dst-port=22 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="SSH 0-256k down p2_interactive NO PASSTHROUGH" connection-rate=0-256k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=22 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="ICQ p2_interactive NO PASSTHROUGH" disabled=no dst-port=5190 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="ICQ p2_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=5190 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="MSN p2_interactive NO PASSTHROUGH" disabled=no dst-port=1863 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="MSN p2_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=1863 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="NateON (Messenger) 0-128k p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=5004 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="NateON (Messenger) 0-128k p2_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=5004 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="telnet 0-64k up p2_interactive NO PASSTHROUGH" connection-rate=0-64k disabled=no dst-port=23 new-packet-mark=("up_p2_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="telnet 0-64k down p2_interactive NO PASSTHROUGH" connection-rate=0-64k disabled=no new-packet-mark=("dn_p2_interactive_".$TREE) passthrough=no protocol=tcp src-port=23 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="IPSEC-ESP - Set for p3_interactive with PASSTHROUGH" disabled=no new-packet-mark=("up_p3_interactive_".$TREE) passthrough=yes protocol=ipsec-esp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="IPSEC-ESP - Set for p3_interactive with PASSTHROUGH" disabled=no new-packet-mark=("dn_p3_interactive_".$TREE) passthrough=yes protocol=ipsec-esp in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="IPSEC-AH - Set for p3_interactive with PASSTHROUGH" disabled=no new-packet-mark=("up_p3_interactive_".$TREE) passthrough=yes protocol=ipsec-ah out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="IPSEC-AH - Set for p3_interactive with PASSTHROUGH" disabled=no new-packet-mark=("dn_p3_interactive_".$TREE) passthrough=yes protocol=ipsec-ah in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="IPSEC NAT-Traversal p3_interactive NO PASSTHROUGH" disabled=no dst-port=4500 new-packet-mark=("up_p3_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="IPSEC NAT-Traversal p3_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p3_interactive_".$TREE) passthrough=no protocol=udp src-port=4500 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="This will match Hulu and similar streams - p6_interactive NO PASSTHROUGH" disabled=no dst-port=1935 new-packet-mark=("up_p6_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="This will match Hulu and similar streams - p6_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p6_interactive_".$TREE) passthrough=no protocol=tcp src-port=1935 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="RTSP (Real time streaming protocol) set at p6_interactive NO PASSTHROUGH" disabled=no dst-port=554 new-packet-mark=("up_p6_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="RTSP (Real time streaming protocol) set at p6_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p6_interactive_".$TREE) passthrough=no protocol=tcp src-port=554 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="RTSP (Real time streaming protocol) set at p6_interactive NO PASSTHROUGH" disabled=no dst-port=554 new-packet-mark=("up_p6_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="RTSP (Real time streaming protocol) set at p6_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p6_interactive_".$TREE) passthrough=no protocol=udp src-port=554 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Pop3 - Set at p4_interactive with NO PASSTHROUGH" disabled=no dst-port=110 new-packet-mark=("up_p4_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Pop3 - Set at p4_interactive with NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p4_interactive_".$TREE) passthrough=no protocol=tcp src-port=110 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="SMTP traffic will be p4_interactive by default NO PASSTHROUGH " disabled=no dst-port=25 new-packet-mark=("up_p4_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="SMTP traffic will be p4_interactive by default NO PASSTHROUGH " disabled=no new-packet-mark=("dn_p4_interactive_".$TREE) passthrough=no protocol=tcp src-port=25 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Secure SMTP - Set at p4_interactive with NO PASSTHROUGH" disabled=no dst-port=465 new-packet-mark=("up_p4_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Secure SMTP - Set at p4_interactive with NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p4_interactive_".$TREE) passthrough=no protocol=tcp src-port=465 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Secure IMAP- Set at p4_interactive with NO PASSTHROUGH" disabled=no dst-port=485 new-packet-mark=("up_p4_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Secure IMAP- Set at p4_interactive with NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p4_interactive_".$TREE) passthrough=no protocol=tcp src-port=485 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="IMAP over SSL- Set at p4_interactive with NO PASSTHROUGH" disabled=no dst-port=993 new-packet-mark=("up_p4_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="IMAP over SSL- Set at p4_interactive with NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p4_interactive_".$TREE) passthrough=no protocol=tcp src-port=993 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="IMAP - Set at p4_interactive with NO PASSTHROUGH" disabled=no dst-port=143 new-packet-mark=("up_p4_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="IMAP - Set at p4_interactive with NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p4_interactive_".$TREE) passthrough=no protocol=tcp src-port=143 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="POP3 over SSL- Set at p4_interactive with NO PASSTHROUGH" disabled=no dst-port=995 new-packet-mark=("up_p4_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="POP3 over SSL- Set at p4_interactive with NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p4_interactive_".$TREE) passthrough=no protocol=tcp src-port=995 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Subversion - Set at p4_interactive with NO PASSTHROUGH" disabled=no dst-port=3690 new-packet-mark=("up_p4_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Subversion - Set at p4_interactive with NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p4_interactive_".$TREE) passthrough=no protocol=tcp src-port=3690 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="SNMP set at p4_interactive NO PASSTHROUGH" disabled=no dst-port=161 new-packet-mark=("up_p4_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="SNMP set at p4_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p4_interactive_".$TREE) passthrough=no protocol=udp src-port=161 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="OpenVPN set at p4_interactive NO PASSTHROUGH" disabled=no dst-port=1194 new-packet-mark=("up_p4_interactive_".$TREE) passthrough=no protocol=udp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="OpenVPN set at p4_interactive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p4_interactive_".$TREE) passthrough=no protocol=udp src-port=1194 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Steam (login) 0-128k p4_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no dst-port=27014-27050 new-packet-mark=("up_p4_interactive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Steam (login) 0-128k p4_interactive NO PASSTHROUGH" connection-rate=0-128k disabled=no new-packet-mark=("dn_p4_interactive_".$TREE) passthrough=no protocol=tcp src-port=27014-27050 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="Steam (downloads) p2_noninteractive NO PASSTHROUGH" disabled=no dst-port=27014-27050 new-packet-mark=("up_p2_noninteractive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="Steam (downloads) p2_noninteractive NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p2_noninteractive_".$TREE) passthrough=no protocol=tcp src-port=27014-27050 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="NNTP is set at p7_noninteractive, NO PASSTHROUGH" disabled=no dst-port=119 new-packet-mark=("up_p7_noninteractive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="NNTP is set at p7_noninteractive, NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p7_noninteractive_".$TREE) passthrough=no protocol=tcp src-port=119 in-interface=$QOSINTERFACE
+add action=mark-packet chain=postrouting comment="NNTP - Alt port p7_noninteractive, NO PASSTHROUGH" disabled=no dst-port=433 new-packet-mark=("up_p7_noninteractive_".$TREE) passthrough=no protocol=tcp out-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="NNTP - Alt port p7_noninteractive, NO PASSTHROUGH" disabled=no new-packet-mark=("dn_p7_noninteractive_".$TREE) passthrough=no protocol=tcp src-port=433 in-interface=$QOSINTERFACE
+add action=mark-packet chain=prerouting comment="http download will be treated as dn_p3_interactive" disabled=no src-port=80,443,8080 protocol=tcp in-interface=$QOSINTERFACE new-packet-mark=("dn_p3_interactive_".$TREE) passthrough=no
+add action=mark-packet chain=postrouting comment="http upload will be treated as up_p3_interactive" disabled=no dst-port=80,443,8080 protocol=tcp out-interface=$QOSINTERFACE new-packet-mark=("up_p3_interactive_".$TREE) passthrough=no
+add action=log chain=notes comment="End QoS tree" disabled=no log-prefix=""
+ 
+#Queue Type:
+/queue type
+add kind=pcq name=("Download_".$TREE) pcq-classifier=dst-address pcq-limit=50 pcq-rate=$"PCQDOWNLOD" pcq-total-limit=25000
+add kind=pcq name=("Upload_".$TREE) pcq-classifier=src-address pcq-limit=50 pcq-rate=$"PCQUPLOAD" pcq-total-limit=25000
+ 
+#Queue Tree:
+/queue tree
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=$"MAXDOWNLOAD" name=("Download_".$TREE) parent=global priority=1
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=$"MAXUPLOAD" name=("Upload_".$TREE) parent=global priority=1
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=$"MAXDLINT" max-limit=$"MAXDOWNLOAD" name=("DN_Interactive_".$TREE) parent=("Download_".$TREE) priority=1
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=$"MAXDLNONINT" max-limit=$"MAXDOWNLOAD" name=("DN_NonInteractive_".$TREE) parent=("Download_".$TREE) priority=8
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=$"MAXUPINT" max-limit=$"MAXUPLOAD" name=("UP_Interactive_".$TREE) parent=("Upload_".$TREE) priority=1
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=$"MAXUPNONINT" max-limit=$"MAXUPLOAD" name=("UP_NonInteractive_".$TREE) parent=("Upload_".$TREE) priority=8
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p1_interactive_".$TREE) packet-mark=("dn_p1_interactive_".$TREE) parent=("DN_Interactive_".$TREE) priority=1 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p2_interactive_".$TREE) packet-mark=("dn_p2_interactive_".$TREE) parent=("DN_Interactive_".$TREE) priority=2 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p3_interactive_".$TREE) packet-mark=("dn_p3_interactive_".$TREE) parent=("DN_Interactive_".$TREE) priority=3 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p4_interactive_".$TREE) packet-mark=("dn_p4_interactive_".$TREE) parent=("DN_Interactive_".$TREE) priority=4 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p5_interactive_".$TREE) packet-mark=("dn_p5_interactive_".$TREE) parent=("DN_Interactive_".$TREE) priority=5 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p6_interactive_".$TREE) packet-mark=("dn_p6_interactive_".$TREE) parent=("DN_Interactive_".$TREE) priority=6 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p7_interactive_".$TREE) packet-mark=("dn_p7_interactive_".$TREE) parent=("DN_Interactive_".$TREE) priority=7 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p8_interactive_".$TREE) packet-mark=("dn_p8_interactive_".$TREE) parent=("DN_Interactive_".$TREE) priority=8 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p1_noninteractive_".$TREE) packet-mark=("dn_p1_noninteractive_".$TREE) parent=("DN_NonInteractive_".$TREE) priority=1 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p2_noninteractive_".$TREE) packet-mark=("dn_p2_noninteractive_".$TREE) parent=("DN_NonInteractive_".$TREE) priority=2 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p3_noninteractive_".$TREE) packet-mark=("dn_p3_noninteractive_".$TREE) parent=("DN_NonInteractive_".$TREE) priority=3 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p4_noninteractive_".$TREE) packet-mark=("dn_p4_noninteractive_".$TREE) parent=("DN_NonInteractive_".$TREE) priority=4 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p5_noninteractive_".$TREE) packet-mark=("dn_p5_noninteractive_".$TREE) parent=("DN_NonInteractive_".$TREE) priority=5 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p6_noninteractive_".$TREE) packet-mark=("dn_p6_noninteractive_".$TREE) parent=("DN_NonInteractive_".$TREE) priority=6 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p7_noninteractive_".$TREE) packet-mark=("dn_p7_noninteractive_".$TREE) parent=("DN_NonInteractive_".$TREE) priority=7 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("down_p8_noninteractive_".$TREE) packet-mark=("dn_p8_noninteractive_".$TREE) parent=("DN_NonInteractive_".$TREE) priority=8 queue=("Download_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p1_interactive_".$TREE) packet-mark=("up_p1_interactive_".$TREE) parent=("UP_Interactive_".$TREE) priority=1 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p2_interactive_".$TREE) packet-mark=("up_p2_interactive_".$TREE) parent=("UP_Interactive_".$TREE) priority=2 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p3_interactive_".$TREE) packet-mark=("up_p3_interactive_".$TREE) parent=("UP_Interactive_".$TREE) priority=3 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p4_interactive_".$TREE) packet-mark=("up_p4_interactive_".$TREE) parent=("UP_Interactive_".$TREE) priority=4 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p5_interactive_".$TREE) packet-mark=("up_p5_interactive_".$TREE) parent=("UP_Interactive_".$TREE) priority=5 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p6_interactive_".$TREE) packet-mark=("up_p6_interactive_".$TREE) parent=("UP_Interactive_".$TREE) priority=6 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p7_interactive_".$TREE) packet-mark=("up_p7_interactive_".$TREE) parent=("UP_Interactive_".$TREE) priority=7 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p8_interactive_".$TREE) packet-mark=("up_p8_interactive_".$TREE) parent=("UP_Interactive_".$TREE) priority=8 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p1_noninteractive_".$TREE) packet-mark=("up_p1_noninteractive_".$TREE) parent=("UP_NonInteractive_".$TREE) priority=1 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p2_noninteractive_".$TREE) packet-mark=("up_p2_noninteractive_".$TREE) parent=("UP_NonInteractive_".$TREE) priority=2 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p3_noninteractive_".$TREE) packet-mark=("up_p3_noninteractive_".$TREE) parent=("UP_NonInteractive_".$TREE) priority=3 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p4_noninteractive_".$TREE) packet-mark=("up_p4_noninteractive_".$TREE) parent=("UP_NonInteractive_".$TREE) priority=4 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p5_noninteractive_".$TREE) packet-mark=("up_p5_noninteractive_".$TREE) parent=("UP_NonInteractive_".$TREE) priority=5 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p6_noninteractive_".$TREE) packet-mark=("up_p6_noninteractive_".$TREE) parent=("UP_NonInteractive_".$TREE) priority=6 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p7_noninteractive_".$TREE) packet-mark=("up_p7_noninteractive_".$TREE) parent=("UP_NonInteractive_".$TREE) priority=7 queue=("Upload_".$TREE)
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=0 name=("up_p8_noninteractive_".$TREE) packet-mark=("up_p8_noninteractive_".$TREE) parent=("UP_NonInteractive_".$TREE) priority=8 queue=("Upload_".$TREE)
+ 
+/system script environment
+remove [ find name=QOSINTERFACE ]
+remove [ find name=TREE ]
+remove [ find name=PCQDOWNLOD ]
+remove [ find name=PCQUPLOAD ]
+remove [ find name=MAXDOWNLOAD ]
+remove [ find name=MAXDLINT ]
+remove [ find name=MAXDLNONINT ]
+remove [ find name=MAXUPLOAD ]
+remove [ find name=MAXUPINT ]
+remove [ find name=MAXUPNONINT ]
